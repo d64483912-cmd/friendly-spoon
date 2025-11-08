@@ -1,4 +1,4 @@
-import { SYSTEM_PROMPT_DEFAULT } from "@/lib/config"
+import { SYSTEM_PROMPT_CLINICAL, SYSTEM_PROMPT_ACADEMIC } from "@/lib/config"
 import { getAllModels } from "@/lib/models"
 import { getProviderForModel } from "@/lib/openproviders/provider-map"
 import type { ProviderWithoutOllama } from "@/lib/user-keys"
@@ -22,6 +22,7 @@ type ChatRequest = {
   isAuthenticated: boolean
   systemPrompt: string
   enableSearch: boolean
+  responseMode?: "clinical" | "academic"
   message_group_id?: string
 }
 
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
       isAuthenticated,
       systemPrompt,
       enableSearch,
+      responseMode,
       message_group_id,
     } = (await req.json()) as ChatRequest
 
@@ -78,7 +80,14 @@ export async function POST(req: Request) {
       throw new Error(`Model ${model} not found`)
     }
 
-    const effectiveSystemPrompt = systemPrompt || SYSTEM_PROMPT_DEFAULT
+    // Use responseMode to determine system prompt, fallback to custom or default
+    let effectiveSystemPrompt = systemPrompt
+    if (!effectiveSystemPrompt) {
+      effectiveSystemPrompt =
+        responseMode === "academic"
+          ? SYSTEM_PROMPT_ACADEMIC
+          : SYSTEM_PROMPT_CLINICAL
+    }
 
     let apiKey: string | undefined
     if (isAuthenticated && userId) {

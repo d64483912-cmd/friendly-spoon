@@ -23,13 +23,13 @@ import { DeveloperTools } from "./connections/developer-tools"
 import { OllamaSection } from "./connections/ollama-section"
 import { AccountManagement } from "./general/account-management"
 import { UserProfile } from "./general/user-profile"
-import { ModelsSettings } from "./models/models-settings"
+import { ResponseModeSettings } from "./response-mode/response-mode-settings"
 
 type SettingsContentProps = {
   isDrawer?: boolean
 }
 
-type TabType = "general" | "appearance" | "models" | "connections"
+type TabType = "general" | "appearance" | "mode" | "connections"
 
 export function SettingsContent({
   isDrawer = false,
@@ -89,11 +89,11 @@ export function SettingsContent({
                   <span>API Keys</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="models"
+                  value="mode"
                   className="flex shrink-0 items-center gap-2"
                 >
                   <CubeIcon className="size-4" />
-                  <span>Models</span>
+                  <span>Response Mode</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="connections"
@@ -125,9 +125,8 @@ export function SettingsContent({
               <ByokSection />
             </TabsContent>
 
-            <TabsContent value="models" className="px-6">
-              <ModelsSettings />
-              {/* <ModelVisibilitySettings /> */}
+            <TabsContent value="mode" className="px-6">
+              <ResponseModeSettings />
             </TabsContent>
 
             <TabsContent value="connections" className="space-y-6 px-6">
@@ -171,12 +170,12 @@ export function SettingsContent({
                   </div>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="models"
+                  value="mode"
                   className="w-full justify-start rounded-md px-3 py-2 text-left"
                 >
                   <div className="flex items-center gap-2">
                     <CubeIcon className="size-4" />
-                    <span>Models</span>
+                    <span>Response Mode</span>
                   </div>
                 </TabsTrigger>
                 <TabsTrigger
@@ -212,9 +211,8 @@ export function SettingsContent({
                 <ByokSection />
               </TabsContent>
 
-              <TabsContent value="models" className="mt-0 space-y-6">
-                <ModelsSettings />
-                {/* <ModelVisibilitySettings /> */}
+              <TabsContent value="mode" className="mt-0 space-y-6">
+                <ResponseModeSettings />
               </TabsContent>
 
               <TabsContent value="connections" className="mt-0 space-y-6">

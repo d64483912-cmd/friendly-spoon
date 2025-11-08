@@ -5,6 +5,7 @@ import { MESSAGE_MAX_LENGTH, SYSTEM_PROMPT_DEFAULT } from "@/lib/config"
 import { Attachment } from "@/lib/file-handling"
 import { API_ROUTE_CHAT } from "@/lib/routes"
 import type { UserProfile } from "@/lib/user/types"
+import { useUserPreferences } from "@/lib/user-preference-store/provider"
 import type { Message } from "@ai-sdk/react"
 import { useChat } from "@ai-sdk/react"
 import { useSearchParams } from "next/navigation"
@@ -50,6 +51,9 @@ export function useChatCore({
   clearDraft,
   bumpChat,
 }: UseChatCoreProps) {
+  // User preferences
+  const { preferences } = useUserPreferences()
+  
   // State management
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasDialogAuth, setHasDialogAuth] = useState(false)
@@ -195,6 +199,7 @@ export function useChatCore({
           isAuthenticated,
           systemPrompt: systemPrompt || SYSTEM_PROMPT_DEFAULT,
           enableSearch,
+          responseMode: preferences.responseMode,
         },
         experimental_attachments: attachments || undefined,
       }
@@ -237,6 +242,7 @@ export function useChatCore({
     messages.length,
     bumpChat,
     setIsSubmitting,
+    preferences.responseMode,
   ])
 
   // Handle suggestion
@@ -281,6 +287,7 @@ export function useChatCore({
             model: selectedModel,
             isAuthenticated,
             systemPrompt: SYSTEM_PROMPT_DEFAULT,
+            responseMode: preferences.responseMode,
           },
         }
 
@@ -308,6 +315,7 @@ export function useChatCore({
       isAuthenticated,
       setMessages,
       setIsSubmitting,
+      preferences.responseMode,
     ]
   )
 
@@ -325,11 +333,12 @@ export function useChatCore({
         model: selectedModel,
         isAuthenticated,
         systemPrompt: systemPrompt || SYSTEM_PROMPT_DEFAULT,
+        responseMode: preferences.responseMode,
       },
     }
 
     reload(options)
-  }, [user, chatId, selectedModel, isAuthenticated, systemPrompt, reload])
+  }, [user, chatId, selectedModel, isAuthenticated, systemPrompt, reload, preferences.responseMode])
 
   // Handle input change - now with access to the real setInput function!
   const { setDraftValue } = useChatDraft(chatId)

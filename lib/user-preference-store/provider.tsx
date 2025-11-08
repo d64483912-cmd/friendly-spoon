@@ -26,7 +26,7 @@ interface UserPreferencesContextType {
   setPromptSuggestions: (enabled: boolean) => void
   setShowToolInvocations: (enabled: boolean) => void
   setShowConversationPreviews: (enabled: boolean) => void
-  setMultiModelEnabled: (enabled: boolean) => void
+  setResponseMode: (mode: "clinical" | "academic") => void
   toggleModelVisibility: (modelId: string) => void
   isModelHidden: (modelId: string) => boolean
   isLoading: boolean
@@ -206,8 +206,8 @@ export function UserPreferencesProvider({
     updatePreferences({ showConversationPreviews: enabled })
   }
 
-  const setMultiModelEnabled = (enabled: boolean) => {
-    updatePreferences({ multiModelEnabled: enabled })
+  const setResponseMode = (mode: "clinical" | "academic") => {
+    updatePreferences({ responseMode: mode })
   }
 
   const toggleModelVisibility = (modelId: string) => {
@@ -232,7 +232,7 @@ export function UserPreferencesProvider({
         setPromptSuggestions,
         setShowToolInvocations,
         setShowConversationPreviews,
-        setMultiModelEnabled,
+        setResponseMode,
         toggleModelVisibility,
         isModelHidden,
         isLoading,
